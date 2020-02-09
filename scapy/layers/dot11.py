@@ -497,7 +497,26 @@ class RadioTap(Packet):
 class Dot11(Packet):
     name = "802.11"
     fields_desc = [
-        BitField("subtype", 0, 4),
+        ConditionalField(
+            BitEnumField("subtype", 0, 4, ["Association Request", "Association Response", "Reassociation Request",
+                                           "Reassociation Response", "Probe Request", "Probe Response",
+                                           "Timing Advertisement", "Reserved", "Beacon", "ATIM", "Disassociation",
+                                           "Authentication", "Deauthentication", "Action", "Action No Ack (NACK)",
+                                           "Reserved"]),
+            lambda pkt: (pkt.type == 0),
+        ),
+        # ConditionalField(
+        #     BitEnumField("subtype", 0, 4, []),
+        #     lambda pkt: (pkt.type == 1),
+        # ),
+        # ConditionalField(
+        #     BitEnumField("subtype", 0, 4, []),
+        #     lambda pkt: (pkt.type == 2),
+        # ),
+        # ConditionalField(
+        #     BitEnumField("subtype", 0, 4, []),
+        #     lambda pkt: (pkt.type == 3),
+        # ),
         BitEnumField("type", 0, 2, ["Management", "Control", "Data",
                                     "Reserved"]),
         BitField("proto", 0, 2),
